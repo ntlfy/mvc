@@ -1,0 +1,126 @@
+﻿@model List<Project_63132244.App_Start.Cart_63132244>
+@using Project_63132244.App_Start
+@{
+    ViewBag.Title = "Giỏ Hàng";
+    Layout = "~/Views/Shared/UserLayout_63132244.cshtml";
+    int TongTien = 0;
+}
+@if (Model == null || Model.Count == 0)
+{
+    <p class="text-danger text-center">
+        Chưa Có Sản Phẩm Nào Được Thêm Vào Giỏ Hàng .
+    </p>
+}
+else
+{
+    <div class="cart-section mt-50 mb-50">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-12">
+                    <div class="cart-table-wrap">
+                        <table class="cart-table">
+                            <thead class="cart-table-head">
+                                <tr class="table-head-row">
+                                    <th class="product-remove"></th>
+                                    <th class="product-image">Ảnh Sản Phẩm</th>
+                                    <th class="product-name">Tên Sản Phẩm</th>
+                                    <th class="product-price">Đơn Giá</th>
+                                    <th class="product-quantity">Số Lượng</th>
+                                    <th class="product-total">Tổng (KG)</th>
+                                </tr>
+                            </thead>
+                            @foreach (Cart_63132244 item in Model)
+                            {
+                                <tbody id="cart-items">
+                                    <tr class="table-body-row">
+                                        <td>
+                                            <a href="#" class="delete-item" data-ma-sp="@item.Ma_SP">
+                                                <i class="far fa-window-close text-danger"></i>
+                                            </a>
+                                        </td>
+                                        <td class="product-image"><img src="~/Images/@item.Anh_SP" alt=""></td>
+                                        <td class="product-name">@item.Ten_SP</td>
+                                        <td class="product-price">@item.DonGia.ToString("#,##0").Replace(',', '.') VNĐ</td>
+                                        <td class="product-quantity">
+                                            <form action="@Url.Action("EditCart")" method="get" class="d-flex">
+                                                <input type="hidden" name="Ma_SP" value="@item.Ma_SP" />
+                                                <input type="number" min="1" step="1" name="khoiLuongMoi" value="@item.KhoiLuong" style="height:25px" />
+                                                <button type="submit" class="fa fa-pencil-ruler text-primary"> </button>
+                                                <style>
+                                                    .fa-pencil-ruler {
+                                                        border-radius: 50%;
+                                                    }
+                                                </style>
+                                            </form>
+                                        </td>
+                                        <td class="product-total">@item.KhoiLuong</td>
+                                    </tr>
+                                </tbody>
+                            }
+                        </table>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="total-section">
+                        <table class="total-table">
+                            <thead class="total-table-head">
+                                <tr class="table-total-row">
+                                    <th>Sản Phẩm </th>
+                                    <th>Đơn Giá</th>
+                                </tr>
+                            </thead>
+                            @foreach (Cart_63132244 item in Model)
+                            {
+                                <tbody>
+                                    <tr class="total-data">
+                                        <td><strong>@item.Ten_SP: </strong></td>
+                                        <td> @item.ThanhTien.ToString("#,##0").Replace(',', '.') VNĐ</td>
+                                    </tr>
+                                </tbody>
+                            }
+                            @foreach (var item in Model)
+                            {
+                                TongTien += item.ThanhTien;
+                            }
+                            <tr class="total-data">
+                                <td><strong>Tồng Tiền: </strong></td>
+                                <td>@TongTien.ToString("#,##0").Replace(',', '.') VNĐ</td>
+                            </tr>
+                        </table>
+                        <div class="cart-buttons">
+                            <a href="/Payments_63132244/Index" class="boxed-btn black">Đặt Hàng</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+@*sử dụng thư viện để hiển thị thông báo cho user*@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.delete-item').click(function (e) {
+            e.preventDefault();
+
+            var maSP = $(this).data('ma-sp');
+            var row = $(this).closest('tr');
+
+            $.ajax({
+                url: '@Url.Action("XoaKhoiGio", "SanPhams_63132244")',
+                type: 'POST',
+                data: { Ma_SP: maSP },
+                success: function (response) {
+                    row.remove();
+                    toastr.success('Xóa thành công');
+                },
+                error: function (xhr, status, error) {
+                    toastr.error('Xóa thất bại');
+                }
+            });
+        });
+    });
+
+</script>

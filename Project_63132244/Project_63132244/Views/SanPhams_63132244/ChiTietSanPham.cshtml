@@ -1,0 +1,72 @@
+﻿@model Project_63132244.Models.Sanpham
+@{
+    ViewBag.Title = "Chi Tiết Sản Phẩm";
+    Layout = "~/Views/Shared/UserLayout_63132244.cshtml";
+
+}
+
+<!-- single product -->
+<div class="single-product mt-150 mb-150" style=" margin-top: -2%">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="single-product-img">
+                    <img src="~/Images/@Html.DisplayFor(model=>model.AnhSP)" alt="">
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="single-product-content">
+                    <h3>@Html.DisplayFor(model => model.Ten_SP)</h3>
+                    <p class="single-product-pricing">
+                        <span>Sản Phẩm Còn : @Html.DisplayFor(model => model.KhoiLuong)</span>
+                        @Html.DisplayFor(model => model.DonGia)
+                        <span class="font-weight-bold"> Xuất Xứ : @(Model.XuatXu ? "Việt Nam" : "Ngoại Nhập")</span>
+                    </p>
+                    <div class="single-product-form">
+                        <a href="#" class="cart-btn add-to-cart" data-ma-sp="@Html.DisplayFor(model => model.Ma_SP)"><i class="fas fa-shopping-cart"></i> Thêm vào giỏ hàng</a>
+                        <p><strong>Danh Mục: </strong>@Html.DisplayFor(model => model.Loai_SP)</p>
+                    </div>
+                    <h4>Share:</h4>
+                    <ul class="product-share">
+                        <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                        <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                        <li><a href="#"><i class="fab fa-google-plus-g"></i></a></li>
+                        <li><a href="#"><i class="fab fa-linkedin"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+            <script>
+            $(document).ready(function () {
+                $('.add-to-cart').click(function (e) {
+                    e.preventDefault();
+
+                    var maSP = $(this).data('ma-sp');
+
+                    $.ajax({
+                        url: '@Url.Action("AddCart", "SanPhams_63132244")',
+                        type: 'POST',
+                        data: { Ma_SP: maSP },
+                        success: function (response) {
+                            toastr.success('Thêm thành công');
+                        },
+                        error: function (xhr, status, error) {
+                            // Xử lý lỗi (nếu cần)
+                        }
+                    });
+                });
+            });
+            </script>
+        </div>
+    </div>
+</div>
+
+<!-- end single product -->
+<!-- more products -->
+<div class="more-products mb-150" style="margin-bottom:-5% ">
+    <h3><span class="orange-text">Mô Tả</span> Sản Phẩm</h3>
+    <p>@Html.DisplayFor(model => model.MoTa)</p>
+</div>
+<!-- end more products -->

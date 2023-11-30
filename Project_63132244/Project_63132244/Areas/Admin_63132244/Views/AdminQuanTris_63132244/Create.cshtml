@@ -1,0 +1,77 @@
+﻿@model Project_63132244.Models.QuanTri
+@{
+    ViewBag.Title = "Thêm Mới Quản Trị";
+    Layout = "~/Areas/Admin_63132244/Views/Shared/AdminLayout63132244.cshtml";
+}
+
+@using (Html.BeginForm("Create", "AdminQuanTris_63132244", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <h4 class="text-center text-primary">@ViewBag.Title</h4>
+    <h6 class="text-success text-center">@ViewBag.Message</h6>
+    <h6 class="text-danger text-center">@ViewBag.Error</h6>
+    <hr />
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal " style="margin-left:80px">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group d-flex">
+            @Html.LabelFor(model => model.TaiKhoan, "Mã Người Dùng", htmlAttributes: new { @class = "control-label  col-md-1" })
+            <div class=" col-md-11">
+                @Html.EditorFor(model => model.TaiKhoan, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.TaiKhoan, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group d-flex">
+            @Html.LabelFor(model => model.Password, "Mật Khẩu", htmlAttributes: new { @class = "control-label  col-md-1" })
+            <div class=" col-md-11">
+                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", required = "required", @type = "password" } })
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group d-flex">
+            @Html.LabelFor(model => model.HoTen, "Họ và Tên", htmlAttributes: new { @class = "control-label  col-md-1" })
+            <div class=" col-md-11">
+                @Html.EditorFor(model => model.HoTen, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.HoTen, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group d-flex">
+            @Html.LabelFor(model => model.DienThoai, "Điện Thoại", htmlAttributes: new { @class = "control-label  col-md-1" })
+            <div class=" col-md-11">
+                @Html.EditorFor(model => model.DienThoai, new { htmlAttributes = new { @class = "form-control", required = "required", @type = "number" } })
+                @Html.ValidationMessageFor(model => model.DienThoai, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group d-flex">
+            @Html.LabelFor(model => model.Avatar, "Ảnh Người Dùng", htmlAttributes: new { @class = "control-label  col-md-1" })
+            <div class=" col-md-11">
+                <input class="mt-1 mb-3" type="file" style="height:30px;" name="Avatar" accept="image/*" />
+                @Html.ValidationMessageFor(model => model.Avatar, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group d-flex mb-3">
+            @Html.LabelFor(model => model.admin, "Giới tính", htmlAttributes: new { @class = "control-label  col-md-1" })
+            <div class=" col-md-11">
+                <div class="checkbox">
+                    @Html.RadioButtonFor(model => model.admin, "False") Không Có Quyền Truy Cập &nbsp;
+                    @Html.RadioButtonFor(model => model.admin, "True", new { @checked = "checked" }) Cấp Quyền Quản Lý
+                    @Html.ValidationMessageFor(model => model.admin, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+        </div>
+        <div class="form-group d-flex justify-content-center align-items-center" style="margin-left:4.5%">
+            <div class="col-md-offset-2  col-md-11">
+                <input type="submit" value="Thêm Mới" class="btn btn-primary mt-2" />
+            </div>
+        </div>
+    </div>
+}
+<div style="margin-bottom:1%">
+    <style>
+        a {
+            text-decoration: none;
+        }
+    </style>
+    @Html.ActionLink("Quay Lại", "Index")
+</div>

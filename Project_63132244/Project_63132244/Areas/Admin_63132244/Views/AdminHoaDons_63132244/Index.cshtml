@@ -1,0 +1,94 @@
+﻿@model IEnumerable<Project_63132244.Models.HoaDon>
+
+@{
+    ViewBag.Title = "Quản Lý Đơn Hàng";
+    Layout = "~/Areas/Admin_63132244/Views/Shared/AdminLayout63132244.cshtml";
+    var grid = new WebGrid(Model, canPage: true, defaultSort: "Ma_HoaDon", rowsPerPage: 15);
+}
+<p>@ViewBag.Error</p>
+<h4 class="text-center text-primary">@ViewBag.Title</h4>
+<hr />
+<div class="text-center" id="gridContent">
+    <p class="h1 text-danger">@ViewBag.Error</p>
+    <style>
+        a {
+            text-decoration: none
+        }
+    </style>
+    @using (Html.BeginForm())
+    {
+        <div class="input-group rounded">
+            <input value="@ViewBag.SearchString" style="height:50px ; border-radius:25px!important;"
+                   type="search" class="form-control rounded" name="searchString" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+            <span id="search-addon">
+                <input type="submit" name="searchString" value="Search" class="fas fa-search typesearch" style="height:50px ;margin-right:15px ; border-radius:25px!important;" />
+            </span>
+            <style>
+                .typesearch {
+                    background-color: #F28123 !important;
+                }
+            </style>
+        </div>
+    }
+    @grid.GetHtml(
+            tableStyle: "table table-bordered table-hover",
+            footerStyle: "grid-footer",
+            fillEmptyRows: true,
+            mode: WebGridPagerModes.Numeric,
+            alternatingRowStyle: "alternatingRowStyle",
+              columns: new[]  // colums in grid
+             {
+            grid.Column("STT",format: item => item.WebGrid.Rows.IndexOf(item) + 1 + Math.Round(Convert.ToDouble(grid.TotalRowCount / grid.PageCount) / grid.RowsPerPage) * grid.RowsPerPage* grid.PageIndex ),
+            grid.Column("Ma_HoaDon","Mã Hóa Đơn"),
+            grid.Column("MaKhachHang","Mã Khách Hàng"),
+            grid.Column("TrangThai_VanChuyen","Trạng Thái Vận Chuyển",format: (@item) => @item.TrangThai_VanChuyen?"Đã Giao":"Đang Giao"),
+            grid.Column("TrangThai_ThanhToan","Trạng Thái Thanh Toán",format: (@item) => @item.TrangThai_ThanhToan?"Đã Thanh Toán":"Chưa Thanh Toán"),
+            grid.Column("PhuongThuc_ThanhToan","Phương Thức Thanh Toán",format: (@item) => @item.PhuongThuc_ThanhToan?"Thanh Toán QR":"Thanh Toán Khi Nhận Hàng"),
+            grid.Column("NgayDat","Ngày Đặt",format:@<text> @item.NgayDat.ToString("dd/MM/yyyy")</text>),
+grid.Column("NgayGiao", "Ngày Giao", format: @<text>@(item.NgayGiao?.ToString("dd/MM/yyyy") ?? "chưa cập nhật")</text>),
+grid.Column("DiaChi", "Địa Chỉ Nhận Hàng"),
+grid.Column("Chức năng", format:
+@<text>
+    <style>
+        span:hover {
+            cursor: pointer;
+        }
+    </style>
+    <a href="@Url.Action("Edit",new { id = item.Ma_HoaDon})" class="edit-btn"><abbr title="Cập nhật dữ liệu"><span class="mdi mdi-pen-plus"></span></abbr></a>
+    <a href="@Url.Action("Details",new { maHoaDon = item.Ma_HoaDon})" class="edit-btn"><abbr title="Xem dữ liệu"><span class="mdi mdi-details"></span></abbr></a>
+    <a href="#" class="edit-btn update-stt" data-hoadons-id="@item.Ma_HoaDon"><abbr title="Đã Giao Hàng"><span class="mdi mdi-update"></span></abbr></a>
+</text>),})
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".update-stt").click(function (e) {
+            e.preventDefault();
+            var idMKH = $(this).data("hoadons-id");
+            $.ajax({
+                url: "@Url.Action("UpdateSTT", "AdminHoaDons_63132244")",
+                type: "POST",
+                data: { id: idMKH },
+                success: function (response) {
+                    if (response.success) {
+                        //Lấy ngày hiện tại với JS
+                        var currentDate = new Date();
+                        var formattedDate = currentDate.toLocaleDateString();
+                        $(e.target).closest("td").prevAll().eq(4).text("Đã Thanh Toán");
+                        $(e.target).closest("td").prevAll().eq(5).text("Đã Giao");
+                        $(e.target).closest("td").prevAll().eq(1).text(formattedDate);
+                        toastr.success('Hỗ Trợ Hoàn Tất');
+                    } else {
+                        alert("Có lỗi xảy ra khi cập nhật trạng thái.");
+                    }
+                },
+                error: function () {
+                    alert("Có lỗi xảy ra khi gửi yêu cầu.");
+                }
+            });
+        });
+    });
+</script>

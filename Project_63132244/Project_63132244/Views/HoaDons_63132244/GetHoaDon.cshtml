@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Project_63132244.Models.HoaDon>
+
+@{
+    ViewBag.Title = "Lịch Sử Mua Hàng";
+    Layout = "~/Views/Shared/UserLayout_63132244.cshtml";
+}
+<div class="container-fluid table-responsive">
+    @if (ViewBag.DanhSachHoaDon != null && ViewBag.DanhSachHoaDon.Count > 0 && ViewBag.DanhSachHoaDon is IEnumerable<Project_63132244.Models.HoaDon> danhSachHoaDon)
+    {
+        <div class="text-center" id="gridContent">
+            <style>
+                a {
+                    text-decoration: none
+                }
+            </style>
+            @{
+                var grid = new WebGrid(source: ViewBag.DanhSachHoaDon, canPage: true, defaultSort: "TrangThai_VanChuyen", rowsPerPage: 10);
+            }
+            @grid.GetHtml(
+                tableStyle: "table table-bordered table-hover",
+                footerStyle: "grid-footer",
+                fillEmptyRows: true,
+                mode: WebGridPagerModes.Numeric,
+                alternatingRowStyle: "alternatingRowStyle",
+                columns: new[] {
+                    grid.Column("STT",format: item => item.WebGrid.Rows.IndexOf(item) + 1 + Math.Round(Convert.ToDouble(grid.TotalRowCount / grid.PageCount) / grid.RowsPerPage) * grid.RowsPerPage * grid.PageIndex ),
+                    grid.Column("Ma_HoaDon", "Mã Hóa Đơn" , style: "col-xs-1"),
+                    grid.Column("MaKhachHang", "Mã Khách Hàng" , style: "col-xs-1"),
+                    grid.Column("TrangThai_VanChuyen", "TT_vận Chuyển", format: (@item) => @item.TrangThai_VanChuyen == true ? "Đã Giao" : "Đang Giao", style: "col-xs-1"),
+                    grid.Column("TrangThai_ThanhToan", "TT_Thanh Toán", format: (@item) => @item.TrangThai_ThanhToan == true ? "Đã Thanh Toán" : "Chưa Thanh Toán"),
+                    grid.Column("PhuongThuc_ThanhToan", "PT_Thanh Toán", format: (@item) => @item.PhuongThuc_ThanhToan == true ? "Thanh Toán QR" : "Thanh Toán Khi Nhận Hàng"),
+                    grid.Column("@hoaDon.NgayDat", "Ngày Đặt", format: @<text>@item.NgayDat.ToString("dd/MM/yyyy")</text>),
+grid.Column("NgayGiao", "Ngày Giao", format: @<text>@(item.NgayGiao?.ToString("dd/MM/yyyy") ?? "chưa cập nhật")</text>),
+grid.Column("DiaChi", "Địa chỉ"),
+grid.Column("Chức năng",format: (item) => Html.ActionLink("Xem chi tiết", "ViewChiTietHoaDon","HoaDons_63132244", new { maHoaDon = item.Ma_HoaDon },"HoaDons_63132244")),
+})
+        </div>
+    }
+    else
+    {
+        <p class="text-danger">Bạn Chưa Đặt Đơn Hàng Nào Từ Chúng Tôi.</p>
+    }
+</div>

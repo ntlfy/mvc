@@ -1,0 +1,46 @@
+﻿@model List<Project_63132244.Models.ChiTietHoaDon>
+@{
+    ViewBag.Title = "ViewChiTietHoaDon";
+    Layout = "~/Views/Shared/UserLayout_63132244.cshtml";
+    var total = Model.Sum(x => x.KhoiLuong * x.DonGia);
+}
+
+
+<div class="container-fluid">
+    @if (Model == null || Model.Count() == 0)
+    {
+        <p class="text-danger">Không có dữ liệu</p>
+    }
+    else
+    {
+        <div class="table-responsive text-center">
+            @{
+                var grid = new WebGrid(source: Model, rowsPerPage: 10);
+            }
+            @grid.GetHtml(
+              tableStyle: "table table-striped table-bordered",
+              headerStyle: "gvHeading",
+              mode: WebGridPagerModes.Numeric,
+              columns: grid.Columns(
+                grid.Column("Ma_HoaDon", "Mã Hóa Đơn"),
+                grid.Column("Ma_SP", "Mã Sản Phẩm"),
+                grid.Column("KhoiLuong", "Khối Lượng", format: @item => @item.KhoiLuong.ToString("N0") + " KG"),
+                grid.Column("DonGia", "Đơn Giá", format: @item => @item.DonGia.ToString("N0") + " VND"),
+                grid.Column("TongTien", "Tổng Tiền Sản Phẩm", format: @item => (@item.KhoiLuong * @item.DonGia).ToString("N0") + " VND")
+              )
+            )
+
+        </div>
+    }
+</div>
+<div class="w-25" style="margin-left:74% ; margin-top:-1%">
+    <div>
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td class="text-center">@total.ToString("N0") VND</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

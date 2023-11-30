@@ -1,0 +1,134 @@
+﻿
+@{
+    ViewBag.Title = "Cửa Hàng";
+    Layout = "~/Views/Shared/UserLayout_63132244.cshtml";
+
+}
+
+@model PagedList.IPagedList<Project_63132244.Models.Sanpham>
+@using PagedList.Mvc;
+@if (!String.IsNullOrEmpty(ViewBag.Error))
+{
+    <div class="alert alert-warning">
+        @ViewBag.Error
+    </div>
+}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="product-filters d-flex">
+                        @using (Html.BeginForm())
+                        {
+                            <div class="input-group rounded" style="margin-top:6% ">
+                                <input value="@ViewBag.SearchString" style="height:50px ;margin-right:15px ; border-radius:25px!important;" type="search" class="form-control rounded" name="searchString" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+                                <span id="search-addon">
+                                    <input type="submit" name="searchString" value="Search" class="fas fa-search typesearch" />
+                                </span>
+                                <style>
+                                    .typesearch {
+                                        background-color: #F28123 !important;
+                                    }
+                                </style>
+                            </div>
+                        }
+                        <ul>
+                            <li class="active"><a style="color:#000000" href="/SanPhams_63132244/Index">Tất Cả Sản Phẩm</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*thêm sản phẩm vào card*@
+    <div class="row product-lists">
+        @foreach (var item in Model)
+        {
+            <div class="col-lg-4 col-md-6 text-center">
+                <div class="single-product-item">
+                    <div class="product-image">
+                        <a href="/SanPhams_63132244/ChiTietSanPham/@item.Ma_SP">
+                            <img style="width:333px; height:280px" src="~/Images/@item.AnhSP" alt="">
+                        </a>
+                    </div>
+                    <h3>@item.Ten_SP</h3>
+                    <p class="product-price">
+                        <span> Xuất Xứ : @(item.XuatXu ? "Việt Nam" : "Ngoại Nhập")</span> @item.DonGia.ToString("#,##0") VNĐ
+                        <span> Còn @($"{item.KhoiLuong:#,##0}") Sản Phẩm</span>
+                    </p>
+                    <a href="#" class="cart-btn add-to-cart" data-ma-sp="@item.Ma_SP">
+                        <i class="fas fa-shopping-cart"></i> Thêm vào giỏ hàng
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<div class="pagination-container">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions { Display = PagedListDisplayMode.IfNeeded })
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<style>
+    .pagination-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .pagination {
+        display: flex;
+        list-style: none;
+        padding: 0;
+    }
+
+        .pagination li {
+            display: inline-block;
+        }
+
+            .pagination li a {
+                display: block;
+                padding: 8px 12px;
+                margin-right: 5px;
+                color: #333;
+                background-color: #fff;
+                border: 1px solid #ddd;
+                border-radius: 3px;
+                text-decoration: none;
+            }
+
+            .pagination li.active a {
+                background-color: #007bff;
+                color: #fff;
+                border-color: #007bff;
+            }
+
+            .pagination li.disabled a {
+                opacity: 0.6;
+                pointer-events: none;
+            }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('.add-to-cart').click(function (e) {
+            e.preventDefault();
+
+            var maSP = $(this).data('ma-sp');
+
+            $.ajax({
+                url: '@Url.Action("AddCart", "SanPhams_63132244")',
+                type: 'POST',
+                data: { Ma_SP: maSP },
+                success: function (response) {
+                    toastr.success('Thêm thành công');
+                },  
+                error: function (xhr, status, error) {
+                }
+            });
+        });
+    });
+</script>

@@ -1,0 +1,42 @@
+﻿@model List<Project_63132244.Models.ChiTietHoaDon>
+@{
+    ViewBag.Title = "Chi Tiết Đơn Hàng";
+    Layout = "~/Areas/Admin_63132244/Views/Shared/AdminLayout63132244.cshtml";
+}
+<h4 class="text-center text-primary">@ViewBag.Title</h4>
+<hr />
+<div class="container-fluid">
+
+    @if (Model == null || Model.Count() == 0)
+    {
+        <p class="text-danger">Không có dữ liệu</p>
+    }
+    else
+    {
+        <div class="table-responsive text-center">
+            @{
+                var grid = new WebGrid(source: Model, rowsPerPage: 10);
+            }
+            @grid.GetHtml(
+              tableStyle: "table table-striped table-bordered",
+              headerStyle: "gvHeading",
+              mode: WebGridPagerModes.Numeric,
+              columns: grid.Columns(
+                grid.Column("Ma_HoaDon", "Mã Hóa Đơn"),
+                grid.Column("Ma_SP", "Mã Sản Phẩm"),
+                grid.Column("KhoiLuong", "Khối Lượng", format: @item => @item.KhoiLuong.ToString("N0") + " KG"),
+                grid.Column("DonGia", "Đơn Giá", format: @item => @item.DonGia.ToString("N0") + " VND"),
+                grid.Column("TongTien", "Tổng tiền", format: @item => (@item.KhoiLuong * @item.DonGia).ToString("N0") + " VND")))
+        </div>
+    }
+</div>
+<div class="d-flex" style="margin-bottom:2% ; margin-top:2% ; margin-left:1%">
+    <style>
+        a {
+            text-decoration: none;
+        }
+    </style>
+    @Html.ActionLink("Quay Lại", "Index")&nbsp;
+
+</div>
+

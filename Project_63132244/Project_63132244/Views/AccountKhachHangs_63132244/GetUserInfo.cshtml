@@ -1,0 +1,46 @@
+﻿@model Project_63132244.Models.KhachHang
+@{
+    ViewBag.Title = "GetUserInfo";
+    Layout = "~/Views/Shared/UserLayout_63132244.cshtml";
+}
+<div class="container rounded bg-white mt-1 mb-1">
+    <div class="row">
+        <div class="col-md-3 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                <img class="rounded-circle mt-5"
+                     src="~/Images/@Html.DisplayFor(model=>model.Avatar)" />
+                <span class="font-weight-bold">@Html.DisplayFor(model => model.MaKhachHang)</span>
+                <span class="text-black-50">@Html.DisplayFor(model => model.Email)</span>
+            </div>
+        </div>
+        <div class="col-md-9 ">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right">Thông Tin Tài Khoản</h4>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-12">
+                        <label class="labels">Họ và Tên</label><input type="text" class="form-control" placeholder="first name" value="@Html.DisplayFor(model=>model.HoTen)"readonly>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <label class="labels">Số Điện Thoại</label><input type="text" class="form-control" placeholder="enter phone number" value="@Html.DisplayFor(model=>model.DienThoai)"readonly>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="labels">Địa Chỉ</label><input type="text" class="form-control" placeholder="enter address" value="@Html.DisplayFor(model=>model.DiaChi)"readonly>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="labels">Mật Khẩu</label><input type="text" class="form-control" placeholder="enter email id" value="@Html.DisplayFor(model=>model.Password)" readonly>
+                    </div>
+                </div>
+                @*<div class="mt-5 text-center">
+                    <button class="btn btn-primary profile-button" type="button">
+                        Save
+                        Profile
+                    </button>
+                </div>*@
+            </div>
+        </div>
+    </div>
+</div>

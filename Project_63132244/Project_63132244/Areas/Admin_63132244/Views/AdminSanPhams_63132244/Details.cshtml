@@ -1,0 +1,66 @@
+﻿@model Project_63132244.Models.Sanpham
+@{
+    ViewBag.Title = "Chi Tiết Sản Phẩm";
+    Layout = "~/Areas/Admin_63132244/Views/Shared/AdminLayout63132244.cshtml";
+}
+
+<div class="container rounded bg-white mt-1 mb-1" style="font-family: 'Manrope', sans-serif!important">
+    <div class="row">
+        <div class="col-md-3 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                <img class="rounded-circle mt-5" style="width:300px; height:300px"
+                     src="~/Images/@Html.DisplayFor(model=>model.AnhSP)" />
+                <span class="font-weight-light">@Html.DisplayFor(model => model.Ten_SP)</span>
+                <span class="font-weight-bold">@(Model.XuatXu ? "Việt Nam" : "Ngoại Nhập")</span>
+            </div>
+        </div>
+        <div class="col-md-9 ">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right text-primary">@ViewBag.Title</h4>
+                </div>
+                <hr />
+                <div class="row mt-2">
+                    <div class="col-md-12">
+                        <label class="labels font-weight-bold">Đơn Giá</label>
+                        <p>@String.Format("{0:N0}", Model.DonGia) VND</p>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <label class="labels font-weight-bold">Khối Lượng Trong Kho</label>
+                        <p>@String.Format("{0:N0}", Model.KhoiLuong) KG</p>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="labels font-weight-bold">Loại Sản Phẩm</label>
+                        <p>@Html.DisplayFor(model => model.Loai_SP)</p>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="labels font-weight-bold">Mô Tả</label>
+                        <p>@Html.DisplayFor(model => model.MoTa)</p>
+                    </div>
+                </div>
+                @*<div class="mt-5 text-center">
+                        <button class="btn btn-primary profile-button" type="button">
+                            Save
+                            Profile
+                        </button>
+                    </div>*@
+            </div>
+        </div>
+    </div>
+</div>
+<div class="d-flex" style="margin-left:3% ; margin-top : -2% ; margin-bottom:1%">
+    <style>
+        a {
+            text-decoration: none;
+        }
+    </style>
+    @Html.ActionLink("Quay Lại", "Index")&nbsp;|&nbsp;
+    <a href="@Url.Action("Edit",new { id = Model.Ma_SP})" class="edit-btn">Cập nhật dữ liệu</a>
+
+</div>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">

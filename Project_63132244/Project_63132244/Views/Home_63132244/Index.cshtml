@@ -1,0 +1,111 @@
+﻿@{
+    ViewBag.Title = "Trang Chủ";
+    Layout = "~/Views/Shared/UserLayout_63132244.cshtml";
+}
+@model PagedList.IPagedList<Project_63132244.Models.Sanpham>
+@using PagedList.Mvc;
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2 text-center">
+            <div class="section-title">
+                <h3>Sản Phẩm Của<span class="orange-text"> Chúng Tôi </span></h3>
+                <p></p>
+            </div>
+        </div>
+    </div>
+</div>
+@foreach (var item in Model)
+{
+    <div class="col-lg-4 col-md-6 text-center">
+        <div class="single-product-item">
+            <div class="product-image">
+                <a href="/SanPhams_63132244/ChiTietSanPham/@item.Ma_SP"><img style="width:333px; height:280px" src="~/Images/@item.AnhSP" alt=""></a>
+            </div>
+            <h3>@item.Ten_SP</h3>
+            <p class="product-price"><span>@item.Ten_SP</span><text> @item.DonGia.ToString("#,##0")</text> </p>
+            <a href="@Url.Action("Index", "SanPhams_63132244")" class="cart-btn"><i class="fas fa-shopping-cart"></i> Đến Trang Mua Hàng Ngay</a>
+        </div>
+    </div>
+}
+<div class="pagination-container">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions { Display = PagedListDisplayMode.IfNeeded })
+</div>
+<div class="list-section pt-80 pb-80" style="width:100%">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+                <div class="list-box d-flex align-items-center">
+                    <div class="list-icon">
+                        <i class="fas fa-shipping-fast"></i>
+                    </div>
+                    <div class="content">
+                        <h3>Miễn Phí Vận Chuyển</h3>
+                        <p>Khi mua hàng trên 500.000 VND</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+                <div class="list-box d-flex align-items-center">
+                    <div class="list-icon">
+                        <i class="fas fa-phone-volume"></i>
+                    </div>
+                    <div class="content">
+                        <h3>Hỗ Trợ 24/7</h3>
+                        <p>Hỗ Trợ Tất Cả Các Ngày</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="list-box d-flex justify-content-start align-items-center">
+                    <div class="list-icon">
+                        <i class="fas fa-sync"></i>
+                    </div>
+                    <div class="content">
+                        <h3>Hoàn Tiền</h3>
+                        <p>Hoàn Tiền Nếu Sản Phẩm Bị Hư Trong Ngày!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<style>
+    .pagination-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .pagination {
+        display: flex;
+        list-style: none;
+        padding: 0;
+    }
+
+        .pagination li {
+            display: inline-block;
+        }
+
+            .pagination li a {
+                display: block;
+                padding: 8px 12px;
+                margin-right: 5px;
+                color: #333;
+                background-color: #fff;
+                border: 1px solid #ddd;
+                border-radius: 3px;
+                text-decoration: none;
+            }
+
+            .pagination li.active a {
+                background-color: #007bff;
+                color: #fff;
+                border-color: #007bff;
+            }
+
+            .pagination li.disabled a {
+                opacity: 0.6;
+                pointer-events: none;
+            }
+</style>
